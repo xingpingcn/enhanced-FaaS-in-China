@@ -1,0 +1,2 @@
+aiohttp==3.9.3;python_version>="3.11"
+aiosqlite==0.20.0;python_version>="3.11"
