@@ -38,7 +38,10 @@ Q：为什么分路线解析不准确？<br>
 A：我使用的是权威DNS服务器自带的路线解析，可能存在误判。如果你想要更加精准的分路线解析，可以自行选取其他DNS服务器——如dnspod——并添加[Netlify.json](https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Netlify.json)或[Vercel.json](https://https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Vercel.json)里的IP到A记录。或使用`NS1.COM`作为权威DNS服务器，并设置根据`ASN`进行路线解析。你可以看看我写的[ASN列表](https://github.com/xingpingcn/china-mainland-asn)。<br>
 
 Q：为什么设置了你的CNAME解析后网站不能访问？<br>
-A：这大概率是使用了`verlify-cname.xingpingcn.eu.org`导致的。需要先把CNAME记录改为官方提供的链接，等待SSL证书生成后再重新设置。这是由于该解析包含两个平台的IP，平台每次访问都会获得二者之一的IP，因而认为你在平台所填写的域名并不是你所拥有的。但是一旦生成证书后，证书就会缓存在平台上，平台只在更新证书的时候验证A记录，且只需要存在一次正确的A记录就可以。
+A：
+
+* 这大概率是使用了`verlify-cname.xingpingcn.eu.org`导致的。需要先把CNAME记录改为官方提供的链接，等待SSL证书生成后再重新设置。这是由于该解析包含两个平台的IP，平台每次访问都会获得二者之一的IP，因而认为你在平台所填写的域名并不是你所拥有的。但是一旦生成证书后，证书就会缓存在平台上。
+* netlify支持上传自己的证书
 
 ## Custom
 
