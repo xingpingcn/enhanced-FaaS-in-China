@@ -55,7 +55,7 @@ FILTER_CONFIG = {
 
 
 #########  netlify  ##########
-NETLIFY_PAT = '' # Personal access tokens
+NETLIFY_PAT = '' # Personal access tokens 
 NETLIFY_SITE_ID = ''
 BASE_NETLIFY_API_URL = 'https://api.netlify.com/api/v1'
 UPDATE_NETLIFY_SITE_API_PATH = f'/sites/{NETLIFY_SITE_ID}'
