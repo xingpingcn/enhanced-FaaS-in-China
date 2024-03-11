@@ -22,7 +22,7 @@ Improve the access speed and stability in China of web pages deployed in vercel 
 
 选取vercel和netlify的IP，定时测试速度，选取稳定且快的ip添加到域名的A记录。国内有三网优化，国外统一使用官方提供的A记录。
 
-大概每一小时更新一次。
+大概每一小时更新一次。 
 
 IP来源
 
