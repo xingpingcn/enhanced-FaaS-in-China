@@ -7,17 +7,11 @@ from aiosqlite import Connection
 import asyncio
 from db import *
 import json
-import time
+from upload_file_to_github import *
 
 
 class AccelerateInCN():
     def __init__(self, platform: str, db_object: Connection) -> None:
-        '''
-
-        Args:
-            platform: platform name. must be same as class name in platforms_to_update
-            db_object: database
-        '''
         self.platform = platform
         self.res_dict = {
             f'{self.platform}':
@@ -36,7 +30,7 @@ class AccelerateInCN():
         self.db: DB = await DB(self.platform, self.db_object)
         # 并发控制 Concurrency control
         self.session: aiohttp.ClientSession = aiohttp.ClientSession(
-            connector=aiohttp.TCPConnector(limit=CONCURRENCY))
+            connector=aiohttp.TCPConnector(limit=7))
         self.hwcloud = await HWcloud(session=self.session)
         return self
 
@@ -59,8 +53,8 @@ class AccelerateInCN():
                 tg.create_task(self.hwcloud.add_one_record_to_HWcloud(ip))
                 tg.create_task(globals()[self.platform]
                                (self.session).update([ip]))
-            print('waiting for dns resolution to take effect(20 minutes)')
-            await asyncio.sleep(60*20)
+            # print('waiting for dns resolution to take effect(20 minutes)')
+            # await asyncio.sleep(60*20)
 
     async def refresh_dns(self, minute=20):
         '''refresh dns
@@ -78,14 +72,13 @@ class AccelerateInCN():
                 dns_record_set))
             print(
                 f'waiting for dns resolution to take effect({minute} minutes)')
-            await asyncio.sleep(60*minute)
+            # await asyncio.sleep(60*minute)
 
     async def run(self):
         '''main enter
 
         Returns:
             result dict of ips classified by isp
-
             {f'{self.platform}':
             {
                 'result': {'dianxin': [], 'liantong': [], 'yidong': []},
@@ -103,19 +96,19 @@ class AccelerateInCN():
 
                 for i in insert_list:
                     main_tg.create_task(self.insert_record(i))
-        # wait for all dns records being set
+        # wait for all dns records being set            
         async with asyncio.TaskGroup() as main_tg:
             for isp in ['dianxin', 'yidong', 'liantong']:
                 # for isp in ['dianxin']:
                 main_tg.create_task(self.main(isp))
-        for k, v in self.res_dict[self.platform]['result'].items():
-            self.res_dict[self.platform]['result'][k] = list(
-                self.res_dict[self.platform]['result'][k])
+        for k,v in self.res_dict[self.platform]['result'].items():
+            self.res_dict[self.platform]['result'][k] = list(self.res_dict[self.platform]['result'][k])
 
         with open(f'{self.platform}.json', 'w') as f:
             json.dump(self.res_dict, f)
         print(self.res_dict)
         await self.hwcloud.update_batch_record_with_line(CNAME_BASE_URL[f'{self.platform}'.upper()], {self.platform: self.res_dict[self.platform]['result']})
+        await upload_to_github(f'{self.platform}.json', self.session)
         return self.res_dict
 
     async def test_and_filter(self, isp: str, now_up_record_list: list):
@@ -164,7 +157,7 @@ class AccelerateInCN():
                 if not about_to_revive_record == []:
                     async with asyncio.TaskGroup()as tg:
                         for record in about_to_revive_record:
-                            tg.create_task(self.db.revive_all(isp, record))
+                            tg.create_task(self.db.revive_all(isp, record[0]))
                     await self.test_and_filter(isp, about_to_revive_record)
                 else:
                     break
@@ -177,6 +170,6 @@ if __name__ == '__main__':
 
     async def main():
         async with aiosqlite.connect('sqlite_db.db') as db:
-            async with AccelerateInCN('Vercel', db) as core:
+            async with AccelerateInCN('Netlify', db) as core:
                 await core.run()
     asyncio.run(main())
