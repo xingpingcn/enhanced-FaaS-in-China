@@ -157,7 +157,7 @@ class AccelerateInCN():
                 if not about_to_revive_record == []:
                     async with asyncio.TaskGroup()as tg:
                         for record in about_to_revive_record:
-                            tg.create_task(self.db.revive_all(isp, record[0]))
+                            tg.create_task(self.db.revive_all(isp, record[0])) 
                     await self.test_and_filter(isp, about_to_revive_record)
                 else:
                     break
