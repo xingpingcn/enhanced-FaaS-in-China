@@ -1,6 +1,6 @@
 # enhanced-FaaS-in-China
 
-Improve the access speed and stability in China of web pages deployed in vercel <br>
+Improve the access speed and stability in China of web pages deployed in vercel and netlify<br>
 提升部署在vercel或netlify的网页在中国的访问速度和稳定性
 
 ## Usage
