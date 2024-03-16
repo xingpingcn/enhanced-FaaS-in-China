@@ -34,18 +34,14 @@ class HWcloud():
 
         except:
             self._token = await self.refresh_token()
+            self.write_json()
         else:
             json_dict = json.load(json_file)
             self._token, last_refresh_time = json_dict['token'], json_dict['last_refresh_time']
             if int(time.time()) - last_refresh_time >= 3600*6:
                 json_file.close()
                 self._token = await self.refresh_token()
-                json_dict = {
-                    'token': self._token,
-                    'last_refresh_time': int(time.time()),
-                }
-                with open('HWcloud_token.json', 'w') as f:
-                    json.dump(json_dict, f)
+                self.write_json()
             else:
                 json_file.close()
         finally:
@@ -61,7 +57,13 @@ class HWcloud():
     @property
     def token(self):
         return self._token
-
+    def write_json(self):
+        json_dict = {
+            'token': self._token,
+            'last_refresh_time': int(time.time()),
+        }
+        with open('HWcloud_token.json', 'w') as f:
+            json.dump(json_dict, f)
     async def refresh_token(self):
         headers = {
             'Content-Type': 'application/json;charset=utf8'
