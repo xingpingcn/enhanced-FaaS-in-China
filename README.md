@@ -6,12 +6,12 @@ Improve the access speed and stability in China of web pages hosted on either ve
 ## Usage
 
 * 如果你的网站部署在`vercel`，则把cname记录改为：
-  * `vercel-cname.xingpingcn.eu.org`
+  * `vercel-cname.xingpingcn.top`
 * 如果你的网站部署在`netlify`，则把cname记录改为：
-  * `netlify-cname.xingpingcn.eu.org`
+  * `netlify-cname.xingpingcn.top`
 * 如果你的网站部署在`netlify`和`vercel`上，则把cname记录改为：
-  * `verlify-cname.xingpingcn.eu.org`
-    * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.eu.org`
+  * `verlify-cname.xingpingcn.top`
+    * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
 
 ## Why to use it
 
@@ -40,7 +40,7 @@ A：我使用的是权威DNS服务器自带的路线解析，可能存在误判�
 Q：为什么设置了你的CNAME解析后网站不能访问？<br>
 A：
 
-* 这大概率是使用了`verlify-cname.xingpingcn.eu.org`导致的。需要先把CNAME记录改为官方提供的链接，等待SSL证书生成后再重新设置。这是由于该解析包含两个平台的IP，平台每次访问都会获得二者之一的IP，因而认为你在平台所填写的域名并不是你所拥有的。但是一旦生成证书后，证书就会缓存在平台上。
+* 这大概率是使用了`verlify-cname.xingpingcn.top`导致的。需要先把CNAME记录改为官方提供的链接，等待SSL证书生成后再重新设置。这是由于该解析包含两个平台的IP，平台每次访问都会获得二者之一的IP，因而认为你在平台所填写的域名并不是你所拥有的。但是一旦生成证书后，证书就会缓存在平台上。
 * netlify支持上传自己的证书。如果还是不行就申请一个能自动续期的证书。
 
 ## Custom
