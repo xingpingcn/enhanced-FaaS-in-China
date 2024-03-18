@@ -11,7 +11,7 @@ Improve the access speed and stability in China of web pages hosted on either ve
   * `netlify-cname.xingpingcn.eu.org`
 * 如果你的网站部署在`netlify`和`vercel`上，则把cname记录改为：
   * `verlify-cname.xingpingcn.eu.org`
-  * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.eu.org`
+    * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.eu.org`
 
 ## Why to use it
 
