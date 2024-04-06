@@ -16,6 +16,7 @@ Improve the access speed and stability in China of web pages hosted on either ve
 ## Why to use it
 
 1. 如果在大陆访问，官方的anycast会将流量大概率路由到东南亚，路线压力很大，但是存在压力较小的美国或者欧洲的路线。
+1. 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
 ## How it works
@@ -33,6 +34,13 @@ Improve the access speed and stability in China of web pages hosted on either ve
   * 官方所提供的链接的A记录
 
 ## Q&A
+
+**Q：和官方提供的cname有什么差别？**
+
+A：
+
+* 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
+* 而我的cname在平均速度上可能不是最快的，但平均响应速度尽量维持在1秒内，最长的响应时间控制在2秒内，而返回非200状态码的省份尽量少于等于2个
 
 **Q：为什么分路线解析不准确？**<br>
 A：我使用的是权威DNS服务器自带的路线解析，可能存在误判。如果你想要更加精准的分路线解析，可以自行选取其他DNS服务器——如dnspod——并添加[Netlify.json](https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Netlify.json)或[Vercel.json](https://https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Vercel.json)里的IP到A记录。或使用`NS1.COM`作为权威DNS服务器，并设置根据`ASN`进行路线解析。你可以看看我写的[ASN列表](https://github.com/xingpingcn/china-mainland-asn)。<br>
