@@ -148,7 +148,7 @@ class DB():
             list of (a_record,) 
         '''  
         return await self._execute_select(f'''select a_record from {self.platform}_a_record_table 
-                                          where (revive_{isp} < {REVIVE} and hp_{isp} > 0 and strftime('%s','now') - last_test_time_{isp} >= 60*15) 
+                                          where (revive_{isp} < {REVIVE} and hp_{isp} > 0 and strftime('%s','now') - last_test_time_{isp} >= 60*15 ) 
                                           limit {limit} offset {offset * limit}''')
     
     async def get_about_to_revive_record(self, isp:str, limit:int = 10, offset:int = 0):

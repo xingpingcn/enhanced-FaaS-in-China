@@ -7,7 +7,7 @@ from aiosqlite import Connection
 import asyncio
 from db import *
 import json
-from upload_file_to_github import *
+import time
 
 
 class AccelerateInCN():
@@ -23,7 +23,7 @@ class AccelerateInCN():
 
         self.res_dict[f'{self.platform}']['result']['default'] = [
             CNAME_DEFAULT_RECORD[f'{self.platform}'.upper()]]
-
+        self.res_backup = []
         self.db_object = db_object
 
     async def _init(self):
@@ -47,14 +47,15 @@ class AccelerateInCN():
         await self.db.close()
         await self.session.close()
 
-    async def insert_record(self, ip: str):
+    async def insert_record(self, ip: str, is_update=False):
         if await self.db.insert(ip) == True:
             async with asyncio.TaskGroup() as tg:
                 tg.create_task(self.hwcloud.add_one_record_to_HWcloud(ip))
-                tg.create_task(globals()[self.platform]
-                               (self.session).update([ip]))
-            # print('waiting for dns resolution to take effect(20 minutes)')
-            # await asyncio.sleep(60*20)
+                if is_update:
+                    tg.create_task(globals()[self.platform]
+                                   (self.session).update([ip]))
+            print('waiting for dns resolution to take effect(20 minutes)')
+            await asyncio.sleep(60*20)
 
     async def refresh_dns(self, minute=20):
         '''refresh dns
@@ -72,7 +73,7 @@ class AccelerateInCN():
                 dns_record_set))
             print(
                 f'waiting for dns resolution to take effect({minute} minutes)')
-            # await asyncio.sleep(60*minute)
+            await asyncio.sleep(60*minute)
 
     async def run(self):
         '''main enter
@@ -95,20 +96,27 @@ class AccelerateInCN():
                                '34.253.160.225', '18.229.231.184', '15.206.54.182', '35.235.101.253', '35.228.53.122',  '52.38.79.87', '13.238.105.1', '104.199.217.228', '18.162.37.140']
 
                 for i in insert_list:
-                    main_tg.create_task(self.insert_record(i))
-        # wait for all dns records being set            
+                    main_tg.create_task(self.insert_record(i, is_update=True))
+        # wait for all dns records being set
         async with asyncio.TaskGroup() as main_tg:
             for isp in ['dianxin', 'yidong', 'liantong']:
                 # for isp in ['dianxin']:
                 main_tg.create_task(self.main(isp))
-        for k,v in self.res_dict[self.platform]['result'].items():
-            self.res_dict[self.platform]['result'][k] = list(self.res_dict[self.platform]['result'][k])
+        for k, v in self.res_dict[self.platform]['result'].items():
+            self.res_dict[self.platform]['result'][k] = list(
+                self.res_dict[self.platform]['result'][k])
+        for isp in ['dianxin', 'yidong', 'liantong']:
+            length = len(self.res_dict[self.platform]['result'][isp])
+            if length < FILTER_CONFIG[self.platform][isp]['a_record_count']:
+                self.res_backup.sort(key=lambda x: (
+                    x['un_code_200_count'], x['http_time']))
+                self.res_dict[self.platform]['result'][isp].extend([res['ip'] for res in self.res_backup[0:min(
+                    FILTER_CONFIG[self.platform][isp]['a_record_count']-length, len(self.res_backup))]])
 
         with open(f'{self.platform}.json', 'w') as f:
             json.dump(self.res_dict, f)
         print(self.res_dict)
         await self.hwcloud.update_batch_record_with_line(CNAME_BASE_URL[f'{self.platform}'.upper()], {self.platform: self.res_dict[self.platform]['result']})
-        await upload_to_github(f'{self.platform}.json', self.session)
         return self.res_dict
 
     async def test_and_filter(self, isp: str, now_up_record_list: list):
@@ -117,15 +125,31 @@ class AccelerateInCN():
             res = await result
             if res[isp]['error'] == False:
                 res[isp]['speed'].sort()
-                if res[isp]['un_code_200_count'] > FILTER_CONFIG[self.platform][isp]['un_code_200_limit'] or res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1] > FILTER_CONFIG[self.platform][isp]['time_limit']:
-                    # if != 200 >= FILTER_CONFIG[self.platform][self.platform][isp]['un_code_200_limit'] or p99 >= FILTER_CONFIG[self.platform][isp]['time_limit']:
-                    await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
-                    print('eliminated', self.platform,
-                          res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
-                else:
+                if res[isp]['un_code_200_count'] <= FILTER_CONFIG[self.platform][isp]['un_code_200_limit'] and res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1] <= FILTER_CONFIG[self.platform][isp]['time_limit']:
+                    # if != 200 <= FILTER_CONFIG[self.platform][self.platform][isp]['un_code_200_limit'] and p99 <= FILTER_CONFIG[self.platform][isp]['time_limit']:
                     if await self.db.revive_add(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', '')) == REVIVE:
                         self.res_dict[f'{self.platform}']['result'][isp].add(
                             res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                else:
+                    try:
+                        time_limit_backup = FILTER_CONFIG[self.platform][isp]['time_limit_backup']
+                        un_code_200_limit_backup = FILTER_CONFIG[self.platform][isp]['un_code_200_limit_backup']
+
+                    except:
+                        time_limit_backup = FILTER_CONFIG['defualt_time_limit_backup']
+                        un_code_200_limit_backup = FILTER_CONFIG['defualt_un_code_200_limit_backup']
+
+                    if res[isp]['un_code_200_count'] <= un_code_200_limit_backup and res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1] <= time_limit_backup:
+                        self.res_backup.append({
+                            'ip': res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''),
+                            'http_time': res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1],
+                            'un_code_200_count': res[isp]['un_code_200_count']
+                        })
+                        await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                    else:
+                        await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                        print('eliminated', self.platform,
+                              res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
 
     async def main(self, isp):
         count_for_break = 0
@@ -157,7 +181,7 @@ class AccelerateInCN():
                 if not about_to_revive_record == []:
                     async with asyncio.TaskGroup()as tg:
                         for record in about_to_revive_record:
-                            tg.create_task(self.db.revive_all(isp, record[0])) 
+                            tg.create_task(self.db.revive_all(isp, record[0]))
                     await self.test_and_filter(isp, about_to_revive_record)
                 else:
                     break
@@ -170,6 +194,7 @@ if __name__ == '__main__':
 
     async def main():
         async with aiosqlite.connect('sqlite_db.db') as db:
-            async with AccelerateInCN('Netlify', db) as core:
+            async with AccelerateInCN('Vercel', db) as core:
                 await core.run()
+
     asyncio.run(main())

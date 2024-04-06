@@ -17,11 +17,15 @@ NETLIFY_URL_TO_TEST = 'https://netlif.domain.com/health.html' # for get netlify 
 VERCEL_URL_TO_TEST = 'https://vercel.domain.com/health.html' 
 OPTIONAL_PATH = '/health.html'
 FILTER_CONFIG = {
+    'defualt_un_code_200_limit_backup' :2,
+    'defualt_time_limit_backup' :2200,
     'Netlify':{
         'dianxin' :{
-            'time_limit': 2000, # ms. ignore dns resolve time
+            'time_limit': 1500, # ms. ignore dns resolve time
             'a_record_count':1,
             'un_code_200_limit':1,
+            'time_limit_backup':3000, # 可以不写此参数 You do not need to write this parameter
+            'un_code_200_limit_backup' :2 # 可以不写此参数 You do not need to write this parameter
         },
         'liantong': {
             'time_limit': 1100,
@@ -36,21 +40,22 @@ FILTER_CONFIG = {
     },
     'Vercel':{
         'dianxin' :{
-            'time_limit': 1300, # ms. ignore dns resolve time
+            'time_limit': 1500, # ms. ignore dns resolve time
             'a_record_count':1,
             'un_code_200_limit':1,
         },
         'liantong': {
-            'time_limit': 1000,
+            'time_limit': 1100,
             'a_record_count':1,
             'un_code_200_limit':0,
+            'un_code_200_limit_backup':1,
         },
         'yidong':{
-            'time_limit': 1000,
+            'time_limit': 1600,
             'a_record_count':1,
             'un_code_200_limit':1,
         }
-    }
+    },
 }
 
 
