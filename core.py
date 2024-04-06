@@ -30,7 +30,7 @@ class AccelerateInCN():
         self.db: DB = await DB(self.platform, self.db_object)
         # 并发控制 Concurrency control
         self.session: aiohttp.ClientSession = aiohttp.ClientSession(
-            connector=aiohttp.TCPConnector(limit=7))
+            connector=aiohttp.TCPConnector(limit=CONCURRENCY))
         self.hwcloud = await HWcloud(session=self.session)
         return self
 
