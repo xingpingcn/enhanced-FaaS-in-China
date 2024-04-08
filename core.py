@@ -7,7 +7,6 @@ from aiosqlite import Connection
 import asyncio
 from db import *
 import json
-import time
 
 
 class AccelerateInCN():
@@ -145,7 +144,7 @@ class AccelerateInCN():
                             'http_time': res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1],
                             'un_code_200_count': res[isp]['un_code_200_count']
                         })
-                        await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                        await self.db.just_refresh_last_test_time(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
                     else:
                         await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
                         print('eliminated', self.platform,
@@ -196,5 +195,4 @@ if __name__ == '__main__':
         async with aiosqlite.connect('sqlite_db.db') as db:
             async with AccelerateInCN('Vercel', db) as core:
                 await core.run()
-
     asyncio.run(main())

@@ -71,6 +71,16 @@ class DB():
             pass
         except Exception as e:
             print(e)
+    async def just_refresh_last_test_time(self,isp:str,a_record:str):
+        '''just refresh last test time (set last_test_time_{isp} =  strftime('%s','now'))
+        '''   
+        try:
+            await self.db.execute(f'''update {self.platform}_a_record_table set last_test_time_{isp} =  strftime('%s','now') where a_record = \'{a_record}\'''')
+            await self.db.commit()
+        except IntegrityError:
+            pass
+        except Exception as e:
+            print(e)
     async def revive_add(self, isp:str,a_record:str):
         '''revive A record
 
@@ -184,5 +194,6 @@ if __name__ == '__main__':
                 print(await a.revive_add('liantong','1.1.1.6'))
                 await a.revive_all('yidong','1.1.1.8')
                 print(await a.get_all_record())
+                await a.just_refresh_last_test_time('dianxin','76.76.21.22')
             print(time.time() - start_time)
     asyncio.run(main())
