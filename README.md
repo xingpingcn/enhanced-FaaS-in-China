@@ -13,6 +13,10 @@ Improve the access speed and stability in China of web pages hosted on either ve
   * `verlify-cname.xingpingcn.top`
     * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
 
+### 可能存在的问题
+
+浙江、福建、河南的个别isp访问可能会失败（官方的cname也是同样的问题，或许是isp限制导致的）
+
 ## Why to use it
 
 1. 如果在大陆访问，官方的anycast会将流量大概率路由到东南亚，路线压力很大，但是存在压力较小的美国或者欧洲的路线。
