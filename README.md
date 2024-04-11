@@ -23,6 +23,22 @@ Improve the access speed and stability in China of web pages hosted on either ve
 1. 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
+### 测速对比
+
+<details>
+<summary>点击查看结果</summary>
+
+![vercel中午](img\vercel-noon.png)
+vercel中午
+![vercel中午-官方](img\vercel-noon-auth.png)
+vercel中午-官方
+![netlify中午](img\netlify-noon.png)
+netlify中午
+![netlify中午-官方](img\netlify-noon-auth.png)
+netlify中午-官方
+
+</details>
+
 ## How it works
 
 选取vercel和netlify的IP，定时测试速度，选取稳定且快的ip添加到域名的A记录。国内有三网优化，国外统一使用官方提供的A记录。
