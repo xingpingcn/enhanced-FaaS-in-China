@@ -23,6 +23,9 @@ Improve the access speed and stability in China of web pages hosted on either ve
 1. 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
+![vercel中午](img/vercel-noon.png)
+vercel中午
+
 ### 测速对比
 
 <details>
