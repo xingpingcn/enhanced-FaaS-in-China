@@ -28,13 +28,13 @@ Improve the access speed and stability in China of web pages hosted on either ve
 <details>
 <summary>点击查看结果</summary>
 
-![vercel中午](img\vercel-noon.png)
+![vercel中午](img/vercel-noon.png)
 vercel中午
-![vercel中午-官方](img\vercel-noon-auth.png)
+![vercel中午-官方](img/vercel-noon-auth.png)
 vercel中午-官方
-![netlify中午](img\netlify-noon.png)
+![netlify中午](img/netlify-noon.png)
 netlify中午
-![netlify中午-官方](img\netlify-noon-auth.png)
+![netlify中午-官方](img/netlify-noon-auth.png)
 netlify中午-官方
 
 </details>
