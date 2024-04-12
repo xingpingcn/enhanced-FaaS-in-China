@@ -22,7 +22,7 @@ class AccelerateInCN():
 
         self.res_dict[f'{self.platform}']['result']['default'] = [
             CNAME_DEFAULT_RECORD[f'{self.platform}'.upper()]]
-        self.res_backup = []
+        self.res_backup = {'dianxin': [], 'liantong': [], 'yidong': []}
         self.db_object = db_object
 
     async def _init(self):
@@ -107,9 +107,9 @@ class AccelerateInCN():
         for isp in ['dianxin', 'yidong', 'liantong']:
             length = len(self.res_dict[self.platform]['result'][isp])
             if length < FILTER_CONFIG[self.platform][isp]['a_record_count']:
-                self.res_backup.sort(key=lambda x: (
+                self.res_backup[isp].sort(key=lambda x: (
                     x['un_code_200_count'], x['http_time']))
-                self.res_dict[self.platform]['result'][isp].extend([res['ip'] for res in self.res_backup[0:min(
+                self.res_dict[self.platform]['result'][isp].extend([res['ip'] for res in self.res_backup[isp][0:min(
                     FILTER_CONFIG[self.platform][isp]['a_record_count']-length, len(self.res_backup))]])
 
         with open(f'{self.platform}.json', 'w') as f:
@@ -129,6 +129,8 @@ class AccelerateInCN():
                     if await self.db.revive_add(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', '')) == REVIVE:
                         self.res_dict[f'{self.platform}']['result'][isp].add(
                             res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                        print('hit', isp,self.platform,
+                              res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
                 else:
                     try:
                         time_limit_backup = FILTER_CONFIG[self.platform][isp]['time_limit_backup']
@@ -138,16 +140,18 @@ class AccelerateInCN():
                         time_limit_backup = FILTER_CONFIG['defualt_time_limit_backup']
                         un_code_200_limit_backup = FILTER_CONFIG['defualt_un_code_200_limit_backup']
 
-                    if res[isp]['un_code_200_count'] <= un_code_200_limit_backup and res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1] <= time_limit_backup:
-                        self.res_backup.append({
+                    if res[isp]['un_code_200_count'] <= un_code_200_limit_backup and res[isp]['speed'][-1] <= time_limit_backup:
+                        self.res_backup[isp].append({
                             'ip': res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''),
-                            'http_time': res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1],
+                            'http_time': res[isp]['speed'][-1],
                             'un_code_200_count': res[isp]['un_code_200_count']
                         })
                         await self.db.just_refresh_last_test_time(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                        print('eliminated in stage2', isp,self.platform,
+                              res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
                     else:
                         await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
-                        print('eliminated', self.platform,
+                        print('eliminated', isp,self.platform,
                               res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
 
     async def main(self, isp):
@@ -193,6 +197,6 @@ if __name__ == '__main__':
 
     async def main():
         async with aiosqlite.connect('sqlite_db.db') as db:
-            async with AccelerateInCN('Vercel', db) as core:
-                await core.run()
+            async with AccelerateInCN('Netlify', db) as self:
+                await self.run()
     asyncio.run(main())
