@@ -15,7 +15,8 @@ Improve the access speed and stability in China of web pages hosted on either ve
 
 ### 可能存在的问题
 
-浙江、福建、河南的个别isp访问可能会失败（官方的cname也是同样的问题，或许是isp限制导致的）
+1. 浙江、福建、河南的个别isp访问可能会失败（官方的cname也是同样的问题，或许是isp限制导致的）
+1. 对于测速工具的选择，itdog.cn测出来的结果有点问题（会出现大片的红，原因未知），可以试试用boce.com、cesu.net之内的来测
 
 ## Why to use it
 
