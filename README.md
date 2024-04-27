@@ -15,7 +15,7 @@ Improve the access speed and stability in China of web pages hosted on either ve
 
 ### 可能存在的问题
 
-1. 浙江、福建、河南的个别isp访问可能会失败（官方的cname也是同样的问题，或许是isp限制导致的）
+1. ~~浙江、福建、河南的个别isp访问可能会失败~~ 目前似乎只有泉州被墙（官方的cname也是同样的问题，或许是isp限制导致的）
 1. 对于测速工具的选择，itdog.cn测出来的结果有点问题（会出现大片的红，原因未知），可以试试用boce.com、cesu.net之内的来测
 
 ## Why to use it
@@ -24,10 +24,13 @@ Improve the access speed and stability in China of web pages hosted on either ve
 1. 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
+> *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 ![vercel中午](img/vercel-noon.png)
 vercel中午
 
 ## 测速对比
+
+> *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 
 <details>
 <summary>点击查看结果</summary>
