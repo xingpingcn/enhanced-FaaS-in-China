@@ -96,3 +96,13 @@ A: 同上
 ## Custom
 
 如果你想自定义，例如增加第三个平台，如`render`、`railway`等，则需要自己准备测速工具和一个域名，并重写`crawler.py`，在`platforms_to_update`新建一个`.py`文件，仿照文件夹内的其他文件重写`update()`方法，最后修改`config.py`文件相关配置。
+
+## Star History
+
+<a href="https://star-history.com/#xingpingcn/enhanced-FaaS-in-China&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=xingpingcn/enhanced-FaaS-in-China&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=xingpingcn/enhanced-FaaS-in-China&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=xingpingcn/enhanced-FaaS-in-China&type=Date" />
+ </picture>
+</a>
