@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  enhanced-faas:
+    build: 
+      context: ./
+    container_name: enhanced-faas
+    volumes:
+      - "./:/bin/enhanced-faas"
+    expose:
+      - 443,80
+    command: ./main.py
+    networks:
+      - faas-proxy
+
+networks:
+  faas-proxy:
+    external: true

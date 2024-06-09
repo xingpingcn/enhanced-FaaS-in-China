@@ -7,7 +7,7 @@ __all__ = ('Crawler',)
 
 class Crawler():
 
-    def __init__(self, session: aiohttp.ClientSession, isp:list = ['dianxin','liantong','yidong'], url_to_test: str = None, test_type: str = 'http') -> None:
+    def __init__(self, session: aiohttp.ClientSession, isp: list = ['dianxin', 'liantong', 'yidong'], url_to_test: str = None, test_type: str = 'http', force_resovle_ip: str = None) -> None:
         '''test url
 
         Args:
@@ -15,9 +15,11 @@ class Crawler():
             isp: list of isp. Defaults to ['dianxin','liantong','yidong']
             url_to_test: test url. Defaults to none.
             test_type: dns or http. Defaults to 'http'.
+            force_resovle_ip: Forced resolution of IP. Be used in http testing.
 
         Return:
-            dict: {'url_to_test' : '','code_200_count': 0, 'un_code_200_count': 0, 'speed': [str]}
+            dict: {'url_to_test' : '','code_200_count': 0, 'un_code_200_count': 0, 'speed': [str],'test_ip":[str]}
+                or a set() when test for dns
         Example:
             >>> Crawler(session, url_to_test = 'https://baidu.com', test_type= 'dns').test()
             >>> {'44.219.53.183', '46.137.195.11', '52.74.166.77', '50.18.215.94', '35.169.59.174', '13.251.96.10', '54.253.236.10', '3.70.101.28', '54.66.176.79', '13.215.144.61', '18.192.231.252', '52.67.97.86', '18.139.194.139', '35.156.224.161', '13.228.199.255', '52.58.254.253', '52.9.166.110', '54.232.109.9', '3.72.140.173'}
@@ -30,19 +32,20 @@ class Crawler():
         self.id_json = {}
         self.url_to_test = url_to_test
         self.test_type = test_type
+        self.force_resovle_ip = force_resovle_ip
         self.mapping_dict = {
-            'dianxin':'电信',
-            'liantong':'联通',
-            'yidong':'移动'
+            'dianxin': '电信',
+            'liantong': '联通',
+            'yidong': '移动'
         }
-        self.mapping_dict_reversed = {v:k for k,v in self.mapping_dict.items()}
-
+        self.mapping_dict_reversed = {
+            v: k for k, v in self.mapping_dict.items()}
 
     async def test(self):
         '''test
 
         Returns:
-            Iteratable Object of result. {'url_to_test' : '','code_200_count'[int]: 0, 'un_code_200_count'[int]: 0, 'speed'[int]: []}
+            Iteratable Object of result. {'url_to_test' : '','code_200_count'[int]: 0, 'un_code_200_count'[int]: 0, 'speed'[int]: [],'test_ip"[str]:''}
         '''
 
         pass
@@ -53,7 +56,7 @@ if __name__ == '__main__':
 
     async def main():
         async with aiohttp.ClientSession() as session:
-            res = await asyncio.gather(Crawler(session=session, test_type='http',url_to_test= 'https://baidu.com').test(),
-                                       Crawler(session=session, test_type='dns',url_to_test= 'https://baidu.com').test())
+            res = await asyncio.gather(Crawler(session=session, test_type='http', url_to_test='https://baidu.com').test(),
+                                       Crawler(session=session, test_type='dns', url_to_test='https://baidu.com').test())
             print(res)
     asyncio.run(main())

@@ -1,21 +1,31 @@
+
+__all__ = ('Base_Platform',)
+
+
+
 from config import *
 from crawler import *
 from set_DNS_record_to_HWcloud import *
-from platforms_to_update import *
+from platforms_to_test import *
 import aiohttp
 from aiosqlite import Connection
 import asyncio
 from db import *
 import json
-import time
+import random,time
 
 
-class AccelerateInCN():
-    def __init__(self, platform: str, db_object: Connection) -> None:
+class Base_Platform():
+    def __init__(self, db_object: Connection, platform) -> None:
+        '''_summary_
+
+        Args:
+            db_object: db
+            platform: platform. same as sub class name
+        '''
         self.platform = platform
         self.res_dict = {
-            f'{self.platform}':
-            {
+            f'{self.platform}':{
                 'result': {'dianxin': set(), 'liantong': set(), 'yidong': set()},
                 'update_time': int(time.time())
             }
@@ -25,17 +35,18 @@ class AccelerateInCN():
             CNAME_DEFAULT_RECORD[f'{self.platform}'.upper()]]
         self.res_backup = {'dianxin': [], 'liantong': [], 'yidong': []}
         self.db_object = db_object
+        self.CONCURRENCY = CONCURRENCY
 
     async def _init(self):
         self.db: DB = await DB(self.platform, self.db_object)
         # 并发控制 Concurrency control
         self.session: aiohttp.ClientSession = aiohttp.ClientSession(
-            connector=aiohttp.TCPConnector(limit=CONCURRENCY))
+            connector=aiohttp.TCPConnector(limit=self.CONCURRENCY))
         self.hwcloud = await HWcloud(session=self.session)
         return self
 
     def __await__(self):
-        return self._init.__await__()
+        return self._init().__await__()
 
     async def __aenter__(self):
         return await self._init()
@@ -47,34 +58,28 @@ class AccelerateInCN():
         await self.db.close()
         await self.session.close()
 
-    async def insert_record(self, ip: str, is_update=False):
-        if await self.db.insert(ip) == True:
-            async with asyncio.TaskGroup() as tg:
-                tg.create_task(self.hwcloud.add_one_record_to_HWcloud(ip))
-                if is_update:
-                    tg.create_task(globals()[self.platform]
-                                   (self.session).update([ip]))
-            print('waiting for dns resolution to take effect(20 minutes)')
-            await asyncio.sleep(60*20)
+    async def insert_record(self, ip: str):
+        await self.db.insert(ip)
+                
 
-    async def refresh_dns(self, minute=20):
+    async def refresh_dns(self):
         '''refresh dns
 
         Will be call if there is nothing in the db or all A records exist in the db become invalid. 
 
-        Args:
-            minute: minute to wait for dns resolution to take effect. Defaults to 10.
         '''
-        dns_record_set = await Crawler(self.session, test_type='dns', url_to_test=globals()[f'{self.platform}_URL_TO_TEST'.upper()]).test()
+        url:str = random.choice(globals()[f'{self.platform}_URL_TO_TEST'.upper()])
+    
+        dns_record_set = await Crawler(self.session, test_type='dns', url_to_test=url).test()
         async with asyncio.TaskGroup() as tg:
             for a_record in dns_record_set:
                 tg.create_task(self.insert_record(a_record))
-            tg.create_task(globals()[self.platform](self.session).update(
-                dns_record_set))
-            print(
-                f'waiting for dns resolution to take effect({minute} minutes)')
-            await asyncio.sleep(60*minute)
+            
+            
+            
 
+    async def run_sub(self):
+        pass
     async def run(self):
         '''main enter
 
@@ -87,24 +92,15 @@ class AccelerateInCN():
             }}
         '''
 
-        if await self.db.get_all_record() == []:
-            await self.refresh_dns()
-        if self.platform == 'Vercel':
-            async with asyncio.TaskGroup() as main_tg:
-                # vercel ip
-                insert_list = ['34.95.57.145', '13.49.54.242', '18.178.194.147', '52.79.72.148', '35.180.16.12', '18.206.69.11', '52.76.85.65', '18.130.52.74', '35.202.100.12', '3.22.103.24',
-                               '34.253.160.225', '18.229.231.184', '15.206.54.182', '35.235.101.253', '35.228.53.122',  '52.38.79.87', '13.238.105.1', '104.199.217.228', '18.162.37.140']
-
-                for i in insert_list:
-                    main_tg.create_task(self.insert_record(i, is_update=True))
+        
+        await self.run_sub()
         # wait for all dns records being set
         async with asyncio.TaskGroup() as main_tg:
             for isp in ['dianxin', 'yidong', 'liantong']:
-                # for isp in ['dianxin']:
+            # for isp in ['liantong']:
                 main_tg.create_task(self.main(isp))
         for k, v in self.res_dict[self.platform]['result'].items():
-            self.res_dict[self.platform]['result'][k] = list(
-                self.res_dict[self.platform]['result'][k])
+            self.res_dict[self.platform]['result'][k] = list(v)
         for isp in ['dianxin', 'yidong', 'liantong']:
             length = len(self.res_dict[self.platform]['result'][isp])
             if length < FILTER_CONFIG[self.platform][isp]['a_record_count']:
@@ -120,18 +116,20 @@ class AccelerateInCN():
         return self.res_dict
 
     async def test_and_filter(self, isp: str, now_up_record_list: list):
+        base_url = random.choice(globals()[self.platform.upper()+'_URL_TO_TEST'])
+        
         for result in asyncio.as_completed(
-                [Crawler(self.session, isp=[isp], url_to_test=f'https://{a_record[0]}.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}').test() for a_record in now_up_record_list if not a_record in self.res_dict[self.platform]['result'][isp]]):
+                [Crawler(self.session, isp=[isp], url_to_test=base_url, force_resovle_ip=f'{a_record[0]}').test() for a_record in now_up_record_list if not a_record in self.res_dict[self.platform]['result'][isp]]):
             res = await result
             if res[isp]['error'] == False:
                 res[isp]['speed'].sort()
+                ip = res[isp]['test_ip']
                 if res[isp]['un_code_200_count'] <= FILTER_CONFIG[self.platform][isp]['un_code_200_limit'] and res[isp]['speed'][int((99/100)*(res[isp]['code_200_count']+res[isp]['un_code_200_count']))-1] <= FILTER_CONFIG[self.platform][isp]['time_limit']:
                     # if != 200 <= FILTER_CONFIG[self.platform][self.platform][isp]['un_code_200_limit'] and p99 <= FILTER_CONFIG[self.platform][isp]['time_limit']:
-                    if await self.db.revive_add(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', '')) == REVIVE:
-                        self.res_dict[f'{self.platform}']['result'][isp].add(
-                            res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                    if await self.db.revive_add(isp, ip) == REVIVE:
+                        self.res_dict[f'{self.platform}']['result'][isp].add(ip)
                         print('hit', isp,self.platform,
-                              res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
+                              ip, res[isp]['speed'][-3:], res[isp]['speed'][0:3])
                 else:
                     try:
                         time_limit_backup = FILTER_CONFIG[self.platform][isp]['time_limit_backup']
@@ -143,17 +141,18 @@ class AccelerateInCN():
 
                     if res[isp]['un_code_200_count'] <= un_code_200_limit_backup and res[isp]['speed'][-1] <= time_limit_backup:
                         self.res_backup[isp].append({
-                            'ip': res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''),
+                            'ip': ip,
                             'http_time': res[isp]['speed'][-1],
                             'un_code_200_count': res[isp]['un_code_200_count']
                         })
-                        await self.db.just_refresh_last_test_time(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
+                        await self.db.just_refresh_last_test_time(isp, ip)
                         print('eliminated in stage2', isp,self.platform,
-                              res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
+                              ip, res[isp]['speed'][-3:], res[isp]['speed'][0:3])
                     else:
-                        await self.db.down_record(isp, res[isp]['url_to_test'].replace(f'.{BASE_DNS_URL_FOR_TEST}{OPTIONAL_PATH}', '').replace('https://', ''))
-                        print('eliminated', isp,self.platform,
-                              res[isp]["url_to_test"], res[isp]['speed'][-3:-1], res[isp]['speed'][0:3])
+                        await self.db.down_record(isp, ip)
+                        print('eliminated in stage3', isp,self.platform,
+                              ip, res[isp]['speed'][-3:], res[isp]['speed'][0:3],'un_code_200_count',res[isp]['un_code_200_count'],res[isp]['un_code_200_count'] <= un_code_200_limit_backup,
+                              'time_limit_backup',time_limit_backup,res[isp]['speed'][-1] <= time_limit_backup,)
 
     async def main(self, isp):
         count_for_break = 0
@@ -167,6 +166,8 @@ class AccelerateInCN():
                         break
                 else:
                     break
+            if count_for_break == 0:
+                await self.refresh_dns()
             while 1:
                 if self.res_dict[f'{self.platform}']['result'][isp].__len__() >= FILTER_CONFIG[self.platform][isp]['a_record_count']:
                     count_for_break = 1
@@ -178,7 +179,7 @@ class AccelerateInCN():
                     break
 
             while 1:
-                if self.res_dict[f'{self.platform}']['result'][isp].__len__() >= FILTER_CONFIG[self.platform][isp]['a_record_count']:
+                if self.res_dict[f'{self.platform}']['result'][isp].__len__() >= FILTER_CONFIG[self.platform][isp]['a_record_count'] or self.res_backup[isp].__len__() >= RES_BACKUP_LENGTH:
                     count_for_break = 1
                     break
                 about_to_revive_record = await self.db.get_about_to_revive_record(isp)
@@ -189,15 +190,7 @@ class AccelerateInCN():
                     await self.test_and_filter(isp, about_to_revive_record)
                 else:
                     break
-            if count_for_break == 0:
-                await self.refresh_dns()
+            if not count_for_break == 0:
+                break
 
 
-if __name__ == '__main__':
-    import aiosqlite
-
-    async def main():
-        async with aiosqlite.connect('sqlite_db.db') as db:
-            async with AccelerateInCN('Netlify', db) as self:
-                await self.run()
-    asyncio.run(main())
