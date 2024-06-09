@@ -9,8 +9,8 @@
 
 1. 下载`acme.sh`用于申请证书。具体下载教程请谷歌。
 1. 假设你的证书放在`/home/netlify_cert`，你需要先用`acme.sh`申请证书。[如何申请](https://xingpingcn.top/docker-learning-notes.html#acme-sh)
-1. 下载`upload_netlify_cert.sh`到你的一个文件夹，假设为`/home/netlify_cert`，打开`upload_netlify_cert.sh`填写相关配置
-1. 把`upload-per-7d`放到`/etc/cron.d`，这个是用于每个星期上传证书的。放到这里就可以了，但是需要打开该文件看看路径是否正确。注意是用root用户运行的。
+1. 下载本repo里的`upload_netlify_cert.sh`到你的一个文件夹，假设为`/home/netlify_cert`，打开`upload_netlify_cert.sh`填写相关配置
+1. 下载本repo里的`upload-per-7d`并且放到`/etc/cron.d`，这个是用于每个星期上传证书的。放到这里就可以了，但是需要打开该文件看看路径是否正确。注意是用root用户运行的。
 
 ## Test
 
