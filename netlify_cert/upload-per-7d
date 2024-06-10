@@ -4,4 +4,5 @@
 # 需要注意的是最后的那个空行不能删除
 # 注意路径
 SHELL=/bin/bash 
+# 有些不支持？表达式，需要改成0 0 * * 2
 0 0 ? * 2 root /bin/bash /home/netlify_cert/upload_netlify_cert.sh > /tmp/test.log 2>&1
