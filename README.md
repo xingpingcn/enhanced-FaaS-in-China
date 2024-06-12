@@ -30,7 +30,7 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 > *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 ![vercel中午](img/vercel-noon.png)
 vercel中午
-![cf-23点晚高峰](img\cf-23utc8.png)
+![cf-23点晚高峰](img/cf-23utc8.png)
 cf-23点晚高峰
 
 ## 测速对比
@@ -40,13 +40,13 @@ cf-23点晚高峰
 <details>
 <summary>点击查看结果</summary>
 
-![cf-23点晚高峰](img\cf-23utc8.png)
+![cf-23点晚高峰](img/cf-23utc8.png)
 cf-23点晚高峰
-![cf-23点晚高峰-官方](img\cf-23utc8-auth.png)
+![cf-23点晚高峰-官方](img/cf-23utc8-auth.png)
 cf-23点晚高峰-官方
-![cf-22点晚高峰](img\cf-22utc8.png)
+![cf-22点晚高峰](img/cf-22utc8.png)
 cf-22点晚高峰
-![cf-22点晚高峰-官方](img\cf-22utc8-auth.png)
+![cf-22点晚高峰-官方](img/cf-22utc8-auth.png)
 cf-22点晚高峰-官方
 ![vercel-23点晚高峰](img/vercel-23utc8.png)
 vercel-23点晚高峰
