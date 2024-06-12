@@ -1,7 +1,7 @@
 # enhanced-FaaS-in-China
 
-Improve the access speed and stability in China of web pages hosted on either vercel or netlify by merely changing your CNAME record from the official one to one I made<br>
-提升部署在vercel或netlify的网页在中国的访问速度和稳定性
+Improve the access speed and stability in China of web pages hosted on cloudflare, vercel or netlify by merely changing your CNAME record from the official one to one I made<br>
+提升部署在cloudflare、vercel或netlify的网页在中国的访问速度和稳定性
 
 ## Usage
 
@@ -12,6 +12,8 @@ Improve the access speed and stability in China of web pages hosted on either ve
 * 如果你的网站部署在`netlify`和`vercel`上，则把cname记录改为：
   * `verlify-cname.xingpingcn.top`
     * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
+* 如果你的网站部署在`cf`上，则把cname记录改为：
+  * `cf-cname.xingpingcn.top`
 
 ### 可能存在的问题
 
@@ -24,9 +26,12 @@ Improve the access speed and stability in China of web pages hosted on either ve
 1. 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
+> **这是优化后的速度**<br>
 > *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 ![vercel中午](img/vercel-noon.png)
 vercel中午
+![cf-23点晚高峰](img\cf-23utc8.png)
+cf-23点晚高峰
 
 ## 测速对比
 
@@ -35,6 +40,14 @@ vercel中午
 <details>
 <summary>点击查看结果</summary>
 
+![cf-23点晚高峰](img\cf-23utc8.png)
+cf-23点晚高峰
+![cf-23点晚高峰-官方](img\cf-23utc8-auth.png)
+cf-23点晚高峰-官方
+![cf-22点晚高峰](img\cf-22utc8.png)
+cf-22点晚高峰
+![cf-22点晚高峰-官方](img\cf-22utc8-auth.png)
+cf-22点晚高峰-官方
 ![vercel-23点晚高峰](img/vercel-23utc8.png)
 vercel-23点晚高峰
 ![vercel-23点晚高峰-官方](img/vercel-23utc8-auth.png)
@@ -56,7 +69,7 @@ netlify中午-官方
 
 ## How it works
 
-选取vercel和netlify的IP，定时测试速度，选取稳定且快的ip添加到域名的A记录。国内有三网优化，国外统一使用官方提供的A记录。
+选取cf、vercel和netlify的IP，定时测试速度，选取稳定且快的ip添加到域名的A记录。国内有三网优化，国外统一使用官方提供的A记录。
 
 大概每一小时更新一次。 
 
@@ -67,6 +80,18 @@ netlify中午-官方
   * 官方`cname.vercel-dns.com.`的A记录
 * netlify
   * 官方所提供的链接的A记录
+* cf
+  * 各种cloudflare的付费用户优选ip
+
+* 境外默认ip
+
+```json
+{
+    'VERCEL':'76.76.21.21',
+    'NETLIFY':'75.2.60.5',
+    'CF':'1.1.1.1'
+}
+```
 
 ## Q&A
 

@@ -17,7 +17,7 @@ NETLIFY_URL_TO_TEST = ['https://domain.com/test.html'] # for get netlify Anycast
 VERCEL_URL_TO_TEST = ['https://domain.com/test.html'] 
 CF_URL_TO_TEST = ['']
 
-CF_SELECTED_DOMAIN_LIST = ['yx.887141.xyz']
+CF_SELECTED_DOMAIN_LIST = ['']
 FILTER_CONFIG = {
     'defualt_un_code_200_limit_backup' :2,
     'defualt_time_limit_backup' :2200,
