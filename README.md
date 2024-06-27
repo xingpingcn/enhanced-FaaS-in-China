@@ -14,8 +14,8 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
     * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
 * 如果你的网站部署在`cf`上，则把cname记录改为：
   * `cf-cname.xingpingcn.top`
-    * 使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。
-    
+    * 使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。如果有些服务，例如cf worker，必须要把域名托管在cf，那么建议你使用cf的saas功能。
+
 ![how2test](img/how2test.png)
 
 ### 可能存在的问题
