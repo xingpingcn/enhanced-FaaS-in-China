@@ -14,6 +14,9 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
     * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
 * 如果你的网站部署在`cf`上，则把cname记录改为：
   * `cf-cname.xingpingcn.top`
+    * 使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。
+    
+![how2test](img/how2test.png)
 
 ### 可能存在的问题
 
@@ -108,6 +111,8 @@ A：
 
 * 这大概率是使用了`verlify-cname.xingpingcn.top`导致的。需要先把CNAME记录改为官方提供的链接，等待SSL证书生成后再重新设置。这是由于该解析包含两个平台的IP，平台每次访问都会获得二者之一的IP，因而认为你在平台所填写的域名并不是你所拥有的。但是一旦生成证书后，证书就会缓存在平台上。
 * netlify[支持上传自己的证书](/netlify_cert/readme.md)。如果还是不行就申请一个能自动续期的证书。
+
+* 如果你的网站部署在`cf`上，使用`cf-cname.xingpingcn.top`，如果你的域名托管在cloudflare，那么在这种情况下使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，例如华为云，然后在cf平台中删除你的站点，之后再使用。
 
 **Q：为什么有的路线（如电信）的DNS A记录解析是官方提供的默认IP？**<br>
 A：这是因为该路线的其他IP质量较差，所以暂时停止解析其路线，改用官方提供的默认IP。你可以通过同时将网站部署在`vercel`和`netlify`，把cname解析改为`verlify-cname.xingpingcn.top`，从而提高容错率。两个平台同一线路同时失效的概率要低许多。
