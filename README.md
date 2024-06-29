@@ -16,6 +16,10 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
   * `cf-cname.xingpingcn.top`
     * 使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。如果有些服务，例如cf worker，必须要把域名托管在cf，那么建议你使用cf的saas功能。
 
+### 怎么测速
+
+1. 可以把cname记录改后测试
+1. 也可以像下图一样填写相关信息然后测速
 ![how2test](img/how2test.png)
 
 ### 可能存在的问题
