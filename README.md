@@ -18,6 +18,8 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 
 ### 怎么测速
 
+> 注意：无论是哪种方法测试，一定要加协议，然后多个测速网站都测一下，因为测速网站本身也会时不时抽风
+
 1. 可以把cname记录改后测试
 1. 也可以像下图一样填写相关信息然后测速
 ![how2test](img/how2test.png)
