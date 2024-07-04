@@ -11,14 +11,17 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
   * `netlify-cname.xingpingcn.top`
 * 如果你的网站部署在`netlify`和`vercel`上，则把cname记录改为：
   * `verlify-cname.xingpingcn.top`
-    * 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
+  > [!IMPORTANT] 
+  > 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
 * 如果你的网站部署在`cf`上，则把cname记录改为：
   * `cf-cname.xingpingcn.top`
-    * 使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。如果有些服务，例如cf worker，必须要把域名托管在cf，那么建议你使用cf的saas功能。
+  > [!IMPORTANT] 
+  >使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。如果有些服务，例如cf worker，必须要把域名托管在cf，那么建议你使用cf的saas功能。
 
 ### 怎么测速
 
-> 注意：无论是哪种方法测试，一定要加协议，然后多个测速网站都测一下，因为测速网站本身也会时不时抽风
+> [!IMPORTANT] 
+> 无论是哪种方法测试，一定要加协议，然后多个测速网站都测一下，因为测速网站本身也会时不时抽风
 
 1. 可以把cname记录改后测试
 1. 也可以像下图一样填写相关信息然后测速
@@ -35,6 +38,7 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 1. 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
+> [!NOTE] 
 > **这是优化后的速度**<br>
 > *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 ![vercel中午](img/vercel-noon.png)
@@ -43,7 +47,7 @@ vercel中午
 cf-22点晚高峰
 
 ## 测速对比
-
+> [!IMPORTANT]  
 > *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 
 <details>
@@ -102,16 +106,6 @@ netlify中午-官方
 
 ## Q&A
 
-**Q：和官方提供的cname有什么差别？**
-
-A：
-
-* 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
-* 而我的cname在平均速度上可能不是最快的，但平均响应速度尽量维持在1秒内，最长的响应时间控制在2秒内，而返回非200状态码的省份尽量少于等于2个
-
-**Q：为什么分路线解析不准确？**<br>
-A：我使用的是权威DNS服务器自带的路线解析，可能存在误判。如果你想要更加精准的分路线解析，可以自行选取其他DNS服务器——如dnspod——并添加[Netlify.json](https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Netlify.json)或[Vercel.json](https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Vercel.json)里的IP到A记录。或使用`NS1.COM`作为权威DNS服务器，并设置根据`ASN`进行路线解析。你可以看看我写的[ASN列表](https://github.com/xingpingcn/china-mainland-asn)。<br>
-
 **Q：为什么设置了你的CNAME解析后网站不能访问？**<br>
 A：
 
@@ -120,12 +114,30 @@ A：
 
 * 如果你的网站部署在`cf`上，使用`cf-cname.xingpingcn.top`，如果你的域名托管在cloudflare，那么在这种情况下使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，例如华为云，然后在cf平台中删除你的站点，之后再使用。
 
-**Q：为什么有的路线（如电信）的DNS A记录解析是官方提供的默认IP？**<br>
+<details>
+<summary>**Q：和官方提供的cname有什么差别？**</summary>
+
+A：
+
+* 官方的cname有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份相应时间非常长
+* 而我的cname在平均速度上可能不是最快的，但平均响应速度尽量维持在1秒内，最长的响应时间控制在2秒内，而返回非200状态码的省份尽量少于等于2个
+</details>
+<details>
+<summary>**Q：为什么分路线解析不准确？**</summary>
+
+A：我使用的是权威DNS服务器自带的路线解析，可能存在误判。如果你想要更加精准的分路线解析，可以自行选取其他DNS服务器——如dnspod——并添加[Netlify.json](https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Netlify.json)或[Vercel.json](https://raw.githubusercontent.com/xingpingcn/enhanced-FaaS-in-China/main/Vercel.json)里的IP到A记录。或使用`NS1.COM`作为权威DNS服务器，并设置根据`ASN`进行路线解析。你可以看看我写的[ASN列表](https://github.com/xingpingcn/china-mainland-asn)。
+</details>
+
+<details>
+<summary>**Q：为什么有的路线（如电信）的DNS A记录解析是官方提供的默认IP？**</summary>
+
 A：这是因为该路线的其他IP质量较差，所以暂时停止解析其路线，改用官方提供的默认IP。你可以通过同时将网站部署在`vercel`和`netlify`，把cname解析改为`verlify-cname.xingpingcn.top`，从而提高容错率。两个平台同一线路同时失效的概率要低许多。
+</details>
+<details>
+<summary>**Q：为什么在json文件种有的路线是一个空列表？**</summary>
 
-**Q：为什么在json文件种有的路线是一个空列表？**<br>
 A: 同上
-
+</details>
 
 ## Custom
 
@@ -133,10 +145,4 @@ A: 同上
 
 ## Star History
 
-<a href="https://star-history.com/#xingpingcn/enhanced-FaaS-in-China&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=xingpingcn/enhanced-FaaS-in-China&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=xingpingcn/enhanced-FaaS-in-China&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=xingpingcn/enhanced-FaaS-in-China&type=Date" />
- </picture>
-</a>
+[![Stargazers over time](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China.svg?variant=adaptive)](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China)
