@@ -116,6 +116,8 @@ A：
 * netlify[支持上传自己的证书](/netlify_cert/readme.md)。如果还是不行就申请一个能自动续期的证书。
 
 * 如果你的网站部署在`cf`上，使用`cf-cname.xingpingcn.top`，如果你的域名托管在cloudflare，那么在这种情况下使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，例如华为云，然后在cf平台中删除你的站点，之后再使用。
+  
+* 如果你只是在测速平台上遇到问题，你可能需要查看[怎么测速](#怎么测速)
 
 <details>
 <summary><b>Q：和官方提供的cname有什么差别？</b></summary>
