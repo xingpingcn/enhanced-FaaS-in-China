@@ -44,10 +44,10 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 > [!NOTE] 
 > **这是优化后的速度**<br>
 > *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*<br>
-![vercel中午](img/vercel-noon.png)
-vercel中午
-![cf-22点晚高峰](img/cf-22.5utc8-2024-6-26.png)
-cf-22点晚高峰
+> ![vercel中午](img/vercel-noon.png)
+> vercel中午
+> ![cf-22点晚高峰](img/cf-22.5utc8-2024-6-26.png)
+> cf-22点晚高峰
 
 ## 测速对比
 > [!IMPORTANT]  
