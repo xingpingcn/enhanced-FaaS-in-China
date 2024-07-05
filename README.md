@@ -148,4 +148,4 @@ A: 同上
 
 ## Star History
 
-[![Stargazers over time](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China.svg?variant=adaptive)](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China)
+[![Stargazers over time](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China.svg?background=%23FFFFFF&axis=%23333333&line=%23ff63db)](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China)
