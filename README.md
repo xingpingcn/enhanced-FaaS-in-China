@@ -5,25 +5,35 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 
 ## Usage
 
-* 如果你的网站部署在`vercel`，则把cname记录改为：
+> [!NOTE]
+> 我这里所说的把 cname 记录改为xxx，意思是在你的权威dns服务器那把**用户**要访问的域名——例如 app.domain.com ——的 cname 记录改为对应平台的优选 cname 记录。
+>
+> *例子1：* 我部署在 vercel 的`blog.domain.com`博客需要加速访问速度，首先要把`blog.domain.com`的 cname 记录改为官方提供的域名，回到 vercel 的控制台查看 ssl 证书是否生成。生成之后再把 cname 记录改为`vercel-cname.xingpingcn.top`
+>
+> *例子2：* 我需要加速搭建在我的 vps 的网站，我需要使用 cf 作为 cdn 并保护源 ip 。[如何使用saas功能](docs/how2use-SaaS-for-CF/how2use-SaaS-for-CF.md)
+
+* 如果你的网站部署在`vercel`，则把 cname 记录改为：
   * `vercel-cname.xingpingcn.top`
-* 如果你的网站部署在`netlify`，则把cname记录改为：
+* 如果你的网站部署在`netlify`，则把 cname 记录改为：
   * `netlify-cname.xingpingcn.top`
 * 如果你的网站部署在`netlify`和`vercel`上，则把cname记录改为：
   * `verlify-cname.xingpingcn.top`
 
-> [!IMPORTANT] 
-> 使用此dns解析建议：先把cname记录改为官方提供的url，等`ssl/tls证书`生成之后再把cname记录改为`verlify-cname.xingpingcn.top`
+> [!IMPORTANT]
+> *使用此 dns 解析建议*：先把 cname 记录改为官方提供的 cname，等`ssl/tls证书`生成之后再把 cname 记录改为`verlify-cname.xingpingcn.top`
 
-* 如果你的网站部署在`cf`上，则把cname记录改为：
+* 如果你的网站部署在`cf`上，则把 cname 记录改为：
   * `cf-cname.xingpingcn.top`
- 
-> [!IMPORTANT] 
->使用此dns解析建议：如果你的域名托管在cloudflare，那么使用这个cname很有可能会遇到403。建议把你的域名托管在非cloudflare平台，然后再在cf平台中删除你的站点，之后再使用。如果有些服务，例如cf worker，必须要把域名托管在cf，那么建议你使用cf的saas功能。
+
+> [!IMPORTANT]
+>*使用此 dns 解析建议*：
+>
+> 1. 如果你的域名托管在 cloudflare，那么使用这个 cname 很有可能会遇到403。建议把你的域名托管在非 cloudflare 平台，然后再在 cf 平台中删除你的站点，之后再使用。
+> 1. 如果有些服务，例如 cf worker、开启橙色云朵保护 vps 的 IP，必须要把域名托管在 cf，那么建议你使用 cf 的 saas 功能。[如何使用saas功能](docs/how2use-SaaS-for-CF/how2use-SaaS-for-CF.md)
 
 ### 怎么测速
 
-> [!WARNING] 
+> [!WARNING]
 > 无论是哪种方法测试，一定要加协议，然后多个测速网站都测一下，因为测速网站本身也会时不时抽风
 
 1. 可以把cname记录改后测试
@@ -42,14 +52,17 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 1. 由于存在被墙风险，如果使用单一的平台——例如vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
 > [!NOTE] 
-> **这是优化后的速度**<br>
-> *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*<br>
-> <br>![vercel中午](img/vercel-noon.png)
+> **这是优化后的速度**
+>
+> *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
+>
+> ![vercel中午](img/vercel-noon.png)
 > vercel中午
 > ![cf-22点晚高峰](img/cf-22.5utc8-2024-6-26.png)
 > cf-22点晚高峰
 
 ## 测速对比
+
 > [!IMPORTANT]  
 > *注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化*
 
