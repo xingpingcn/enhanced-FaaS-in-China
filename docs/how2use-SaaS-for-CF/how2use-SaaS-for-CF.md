@@ -30,7 +30,11 @@ saas 域名托管在 cf 平台。进入控制台。你需要先绑定银行卡
 
 之后进入到 app.domain.com 的dns服务器，cname记录改为 `cf-cname.xingpingcn.top`
 
+最后修改
+
+![img](./tls_cert_setting.png)
+
 ## 注意事项
 
-1. app.domain.com 不能托管在 cf ！否则非常403，原因未知。
+1. app.domain.com 不能托管在 cf ！否则会 403，原因未知。
 1. 在[需要什么](#需要什么)中，我提到只需要一个域名的思路，你可以尝试把 domain.com 托管在cf，app.domain.com 托管在其他权威 dns 服务器。
