@@ -3,6 +3,10 @@
 Improve the access speed and stability in China of web pages hosted on cloudflare, vercel or netlify by merely changing your CNAME record from the official one to one I made<br>
 提升部署在cloudflare、vercel或netlify的网页在中国的访问速度和稳定性
 
+![stars](https://img.shields.io/github/stars/xingpingcn/enhanced-FaaS-in-China?style=flat)
+![commit](https://img.shields.io/github/last-commit/xingpingcn/enhanced-FaaS-in-China?display_timestamp=author&style=flat)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxingpingcn%2Fenhanced-FaaS-in-China&count_bg=%236167ED&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 ## Usage
 
 > [!NOTE]
