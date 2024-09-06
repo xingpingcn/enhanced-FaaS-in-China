@@ -10,7 +10,7 @@ RES_BACKUP_LENGTH = 6
 CNAME_DEFAULT_RECORD = {
     'VERCEL':'76.76.21.21',
     'NETLIFY':'75.2.60.5',
-    'CF':'visa.cn.'
+    'CF':'japan.com.'
 }
 CONCURRENCY = 7 # for aiohttp.TCPConnector(limit=CONCURRENCY)
 NETLIFY_URL_TO_TEST = ['https://domain.com/test.html'] # for get netlify Anycast IPs
