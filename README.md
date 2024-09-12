@@ -39,6 +39,7 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 
 > [!WARNING]
 > 无论是哪种方法测试，一定要加协议，然后多个测速网站都测一下，因为测速网站本身也会时不时抽风
+> 不要测我的这几个域名，因为会存在假阴性，太多人测会被对应平台认为是 ddos，虽然对 dns 解析没有影响。
 
 1. 可以把cname记录改后测试
 1. 也可以像下图一样填写相关信息然后测速
