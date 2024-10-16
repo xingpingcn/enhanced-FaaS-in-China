@@ -23,14 +23,12 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 - 如果你的网站部署在`netlify`和`vercel`上，则把 cname 记录改为：
   - `verlify-cname.xingpingcn.top`
 
-> [!IMPORTANT]
-> _使用此 dns 解析建议_：先把 cname 记录改为官方提供的 cname，等`ssl/tls证书`生成之后再把 cname 记录改为`verlify-cname.xingpingcn.top`
+> [!IMPORTANT] > _使用此 dns 解析建议_：先把 cname 记录改为官方提供的 cname，等`ssl/tls证书`生成之后再把 cname 记录改为`verlify-cname.xingpingcn.top`
 
 - 如果你的网站部署在`cf`上，则把 cname 记录改为：
   - `cf-cname.xingpingcn.top`
 
-> [!IMPORTANT]
-> _使用此 dns 解析建议_：
+> [!IMPORTANT] > _使用此 dns 解析建议_：
 >
 > 1. 如果你的域名托管在 cloudflare，那么使用这个 cname 很有可能会遇到 403。建议把你的域名托管在非 cloudflare 平台，然后再在 cf 平台中删除你的站点，之后再使用。
 > 1. 如果有些服务，例如 cf worker、开启橙色云朵保护 vps 的 IP，必须要把域名托管在 cf，那么建议你使用 cf 的 saas 功能。[如何使用 saas 功能](docs/how2use-SaaS-for-CF/how2use-SaaS-for-CF.md)
@@ -57,8 +55,7 @@ Improve the access speed and stability in China of web pages hosted on cloudflar
 1. 官方的 cname 有时在平均速度上是很快的，但是缺乏稳定性，会出现好几个省份都访问不了的情况，又或者个别省份响应时间非常长
 1. 由于存在被墙风险，如果使用单一的平台——例如 vercel——则会存在全军覆没的情况，既国内所有地方都不能访问你的网站。
 
-> [!NOTE]
-> **这是优化后的速度**
+> [!NOTE] > **这是优化后的速度**
 >
 > _注：目前似乎只有泉州被墙（红）；测速结果未能及时更新，现在显示的是之前的测速结果；测速速度没太大变化_
 >
