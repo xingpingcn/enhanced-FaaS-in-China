@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+*.log
+*.sqlite3
+*.db
+*.env
+.env.*
+.venv/
+venv/
+ENV/
+
+# VSCode
+.vscode/
+.history/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+
+# Certificates/Secrets
+*.pem
+*.crt
+*.key
+*.csr
+*.pfx
+*.p12
+
+# Others
+*.bak
+*.swp
+*.swo
+*.tmp
+*.orig
+
+# Netlify/Vercel/Cloudflare
+netlify_cert/logs/
