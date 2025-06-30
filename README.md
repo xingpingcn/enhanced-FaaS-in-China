@@ -197,10 +197,7 @@ A: 同上
 
 [![Stargazers over time](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China.svg?background=%23FFFFFF&axis=%23333333&line=%23ff63db)](https://starchart.cc/xingpingcn/enhanced-FaaS-in-China)
 
-<!-- 
+
 
 [![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source") 
 
- -->
-
-[<img src="https://dartnode.com/branding/DN-Open-Source-sm.png" alt="Powered by DartNode" width="10">](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
