@@ -7,7 +7,7 @@ __all__ = ('Crawler',)
 
 class Crawler():
 
-    def __init__(self, session: aiohttp.ClientSession, isp: list = ['dianxin', 'liantong', 'yidong'], url_to_test: str = None, test_type: str = 'http', force_resovle_ip: str = None) -> None:
+    def __init__(self, session: aiohttp.ClientSession, isp: list = None, url_to_test: str = None, test_type: str = 'http', force_resovle_ip: str = None) -> None:
         '''test url
 
         Args:
@@ -27,6 +27,8 @@ class Crawler():
             >>> Crawler(session, url_to_test = 'https://baidu.com', test_type= 'http').test()
             >>> {'url_to_test': 'https://baidu.com', 'dianxin': {'code_200_count': 32, 'un_code_200_count': 0, 'speed': [225, 271, 270, 259, 303, 322, 328, 358, 358, 395, 254, 382, 441, 421, 407, 436, 447, 471, 492, 526, 327, 394, 227, 320, 329, 1888, 2382, 3284, 3174, 6224, 4435, 7833]}, 'liantong': {'code_200_count': 31, 'un_code_200_count': 0, 'speed': [152, 202, 204, 219, 217, 240, 255, 239, 234, 267, 259, 272, 278, 299, 293, 306, 316, 308, 316, 326, 240, 386, 346, 215, 261, 324, 220, 308, 307, 352, 495]}, 'yidong': {'code_200_count': 30, 'un_code_200_count': 1, 'speed': [194, 220, 264, 239, 291, 299, 331, 336, 375, 396, 352, 408, 351, 389, 442, 530, 302, 308, 399, 363, 320, 319, 392, 492, 334, 362, 262, 310, 332, 274, 0]}}
 '''
+        if isp is None:
+            isp = []
         self.session = session
         self.isp = isp
         self.id_json = {}

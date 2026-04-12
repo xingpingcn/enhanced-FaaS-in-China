@@ -14,13 +14,15 @@ import json
 from upload_file_to_github import *
 import random
 class TestDomainManager:
-    def __init__(self, url_to_test, selected_domain=[]):
+    def __init__(self, url_to_test, selected_domain=None):
         """初始化测试域名管理器
         
         Args:
             url_to_test: 测试域名列表
             selected_domain: 优选域名列表，默认为空列表
         """
+        if selected_domain is None:
+            selected_domain = []
         self._url_to_test = set(url_to_test)   # 使用集合存储测试域名
         self._selected_domain = set(selected_domain)   # 使用集合存储优选域名
         
