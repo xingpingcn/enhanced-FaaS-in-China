@@ -30,22 +30,16 @@ class HWcloud():
 
     async def _init(self):
         try:
-            json_file = open('HWcloud_token.json', 'rb')
-
-        except:
-            self._token = await self.refresh_token()
-            self.write_json()
-        else:
-            json_dict = json.load(json_file)
-            self._token, last_refresh_time = json_dict['token'], json_dict['last_refresh_time']
+            with open('HWcloud_token.json', 'rb') as json_file:
+                json_dict = json.load(json_file)
+                self._token, last_refresh_time = json_dict['token'], json_dict['last_refresh_time']
             if int(time.time()) - last_refresh_time >= 3600*6:
-                json_file.close()
                 self._token = await self.refresh_token()
                 self.write_json()
-            else:
-                json_file.close()
+        except FileNotFoundError:
+            self._token = await self.refresh_token()
+            self.write_json()
         finally:
-
             self.headers = {
                 'X-Auth-Token': self._token
             }
