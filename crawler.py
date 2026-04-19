@@ -44,11 +44,18 @@ class Crawler():
     async def test(self):
         '''test
 
+        Raises:
+            NotImplementedError: This method must be implemented by subclasses.
+            Crawler is a base class that provides common functionality but
+            does not implement the actual testing logic.
+
         Returns:
             Iteratable Object of result. {'url_to_test' : '','code_200_count'[int]: 0, 'un_code_200_count'[int]: 0, 'speed'[int]: [],'test_ip"[str]:''}
         '''
-
-        pass
+        raise NotImplementedError(
+            f"{self.__class__.__name__} does not implement test(). "
+            "This is a base class - use a subclass that implements the test method."
+        )
 
 
 if __name__ == '__main__':
@@ -56,7 +63,9 @@ if __name__ == '__main__':
 
     async def main():
         async with aiohttp.ClientSession() as session:
-            res = await asyncio.gather(Crawler(session=session, test_type='http', url_to_test='https://baidu.com').test(),
-                                       Crawler(session=session, test_type='dns', url_to_test='https://baidu.com').test())
-            print(res)
+            try:
+                res = await Crawler(session=session, test_type='http', url_to_test='https://baidu.com').test()
+                print(res)
+            except NotImplementedError as e:
+                print(f"Expected error: {e}")
     asyncio.run(main())
